@@ -33,8 +33,14 @@ module Monkeylearn
     def throttled?(response)
       return false if response.status != 429
       error_detail = JSON.parse(response.body)['detail']
-      match = /available in ([\d]+) seconds/.match(error_detail)
-       if match then match[1].to_i else false end
+
+      if match = /available in ([\d]+) seconds/.match(error_detail)
+        match[1].to_i
+      elsif /Too many concurrent requests/.match(error_detail)
+        2
+      else
+        false
+      end
     end
 
     def get_connection
