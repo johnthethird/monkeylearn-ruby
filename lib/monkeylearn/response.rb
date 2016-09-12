@@ -8,7 +8,7 @@ module Monkeylearn
 
     def raw_response=(raw_response)
       @raw_response = raw_response
-      @result = JSON.parse(raw_response.body)
+      @result = JSON.parse(raw_response.try(:body) || [])
       @query_limit_remaining = raw_response.headers['X-Query-Limit-Remaining'].to_i
     end
   end
